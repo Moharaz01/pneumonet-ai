@@ -248,7 +248,7 @@ You will also need approximately **4 GB of free RAM** because TensorFlow and the
 ### Step 2: Download the Project
 
 ```bash
-git clone https://github.com/[your-username]/pneumonet-ai.git
+git clone https://github.com/Moharaz01/pneumonet-ai.git
 cd pneumonet-ai
 ```
 
@@ -269,7 +269,7 @@ source pneumonet_env/bin/activate
 TensorFlow is a large package (~600 MB). This step will take several minutes.
 
 ```bash
-pip install -r requirements_pneumonet.txt
+pip install -r requirements.txt
 ```
 
 **If you have an NVIDIA GPU** and want to use it for faster training:
@@ -281,7 +281,7 @@ pip install tensorflow[and-cuda]
 ### Step 5: Run the App
 
 ```bash
-streamlit run pneumonet_app.py
+streamlit run app.py
 ```
 
 The app opens at `http://localhost:8501`. The first load may take 30–60 seconds as TensorFlow initialises.
@@ -294,19 +294,17 @@ The app opens at `http://localhost:8501`. The first load may take 30–60 second
 
 Hugging Face Spaces is the best free option for ML-heavy applications because it provides more RAM and compute than Streamlit Community Cloud, which is important for TensorFlow.
 
+This project is deployed as a **Docker SDK** Space (not the Streamlit SDK) — this gives full control over the container, which matters for pinning `tensorflow-cpu` and keeping the image lean:
+
 1. Create a free account at [huggingface.co](https://huggingface.co)
 2. Click **New Space**
 3. Set:
    - Space name: `pneumonet-ai`
-   - SDK: **Streamlit**
+   - SDK: **Docker**
    - Hardware: **CPU Basic** (free tier) — sufficient for demo
-4. Upload files:
-   - `pneumonet_app.py` (rename to `app.py` if required)
-   - `requirements_pneumonet.txt` (rename to `requirements.txt`)
-5. The space will build automatically — this takes 5–10 minutes for TensorFlow
-6. URL: `https://huggingface.co/spaces/[username]/pneumonet-ai`
-
-**Important:** Rename `requirements_pneumonet.txt` to `requirements.txt` for Hugging Face deployment — it expects that filename.
+4. Upload files: `app.py`, `requirements.txt`, `Dockerfile`, `README.md` (with the HF YAML front matter — `sdk: docker`, `app_port: 8501`)
+5. The space will build automatically from the Dockerfile — this takes 5–10 minutes for TensorFlow
+6. Live at: **[huggingface.co/spaces/Moharaz/pneumonet-ai](https://huggingface.co/spaces/Moharaz/pneumonet-ai)**
 
 ### Option B: Streamlit Community Cloud
 
@@ -315,7 +313,7 @@ Note: TensorFlow apps may be slow on Streamlit's free tier due to memory constra
 1. Push code to a public GitHub repository
 2. Go to [share.streamlit.io](https://share.streamlit.io)
 3. Connect your GitHub repository
-4. Set main file to: `pneumonet_app.py`
+4. Set main file to: `app.py`
 5. Deploy
 
 **Memory optimisation tip:** If the app crashes due to memory limits, you can reduce TensorFlow's memory usage by adding to the top of your app:
@@ -328,20 +326,19 @@ tf.config.threading.set_inter_op_parallelism_threads(1)
 tf.config.threading.set_intra_op_parallelism_threads(2)
 ```
 
-### Option C: Docker with GPU Support
+### Option C: Docker (this is how the live Space is actually deployed)
 
 ```dockerfile
-# GPU-enabled Dockerfile
-FROM tensorflow/tensorflow:2.15.0-gpu
-
+FROM python:3.11-slim
 WORKDIR /app
-COPY requirements_pneumonet.txt .
-RUN pip install --no-cache-dir streamlit plotly pillow scikit-learn
-COPY pneumonet_app.py .
-
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app.py .
 EXPOSE 8501
-CMD ["streamlit", "run", "pneumonet_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
 ```
+
+For GPU-accelerated training instead of the free-tier CPU deployment, swap the base image to `tensorflow/tensorflow:2.15.0-gpu`.
 
 ---
 
@@ -350,7 +347,7 @@ CMD ["streamlit", "run", "pneumonet_app.py", "--server.port=8501", "--server.add
 ```
 project2_pneumonet_dl/
 │
-├── pneumonet_app.py              ← Main Streamlit application
+├── app.py                        ← Main Streamlit application
 │   ├── Synthetic X-ray data generation
 │   ├── Custom CNN architecture + training simulation
 │   ├── MobileNetV2 transfer learning pipeline
@@ -360,9 +357,9 @@ project2_pneumonet_dl/
 │   ├── DL concepts deep-dive (educational)
 │   └── Ethics & Compliance (MHRA/UK GDPR)
 │
-├── requirements_pneumonet.txt    ← Dependencies
-├── README_PneumoNet.md           ← This file
-├── DEPLOY_PneumoNet.md           ← Extended deployment guide
+├── requirements.txt              ← Dependencies (used by the Dockerfile)
+├── Dockerfile                    ← Docker SDK deployment config for Hugging Face Spaces
+├── README.md                     ← This file (also carries the HF Spaces YAML front matter)
 ├── GDPR_PneumoNet.md             ← Medical AI compliance document
 └── .gitignore                    ← Git exclusions
 ```
