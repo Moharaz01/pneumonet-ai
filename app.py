@@ -74,19 +74,19 @@ st.markdown("""
     }
     .medical-disclaimer {
         background: #fff3e0; border: 2px solid #e65100; border-radius: 8px;
-        padding: 1rem; margin: 1rem 0;
+        padding: 1rem; margin: 1rem 0; color: #7a3e00;
     }
     .normal-result {
         background: #e8f5e9; border: 2px solid #2e7d32; border-radius: 10px;
-        padding: 1.5rem; text-align: center;
+        padding: 1.5rem; text-align: center; color: #1b5e20;
     }
     .pneumonia-result {
         background: #ffebee; border: 2px solid #c62828; border-radius: 10px;
-        padding: 1.5rem; text-align: center;
+        padding: 1.5rem; text-align: center; color: #8e1c1c;
     }
     .metric-card {
         background: white; padding: 1.2rem; border-radius: 10px;
-        border-left: 4px solid #1565c0; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        border-left: 4px solid #1565c0; box-shadow: 0 2px 10px rgba(0,0,0,0.08); color: #1a237e;
     }
     .section-header {
         font-size: 1.4rem; font-weight: 600; color: #1a237e;
@@ -94,7 +94,7 @@ st.markdown("""
     }
     .arch-box {
         background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px;
-        padding: 1rem; font-family: monospace; font-size: 0.85rem;
+        padding: 1rem; font-family: monospace; font-size: 0.85rem; color: #24292e;
     }
     .gdpr-badge {
         background: #e8f5e9; border: 1px solid #4caf50; border-radius: 20px;
@@ -106,6 +106,10 @@ st.markdown("""
         color: white; border: none; border-radius: 8px;
         font-weight: 600; padding: 0.6rem 2rem;
     }
+    /* Fallback: any light-background info box gets dark text unless it
+       sets its own color explicitly (inline colors on children still win). */
+    div[style*="background:#f"], div[style*="background: #f"],
+    div[style*="background:#e"], div[style*="background: #e"] { color: #1f2937 !important; }
 </style>
 """, unsafe_allow_html=True)
 
