@@ -1,3 +1,21 @@
+---
+title: PneumoNet AI
+emoji: 🫁
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 8501
+tags:
+- streamlit
+- tensorflow
+- deep-learning
+- healthcare-ai
+- computer-vision
+pinned: false
+license: mit
+short_description: Deep learning chest X-ray pneumonia detection with Grad-CAM explainability
+---
+
 # 🫁 PneumoNet AI — Deep Learning Chest X-Ray Classification System
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://python.org)
