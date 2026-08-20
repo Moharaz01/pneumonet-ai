@@ -13,7 +13,7 @@ tags:
 - computer-vision
 pinned: false
 license: mit
-short_description: Deep learning chest X-ray pneumonia detection with Grad-CAM explainability
+short_description: Deep learning chest X-ray pneumonia detection with Grad-CAM
 ---
 
 # 🫁 PneumoNet AI — Deep Learning Chest X-Ray Classification System
